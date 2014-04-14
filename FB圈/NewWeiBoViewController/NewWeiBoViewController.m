@@ -89,6 +89,33 @@
     }
     
     pageCount[index] = 1;
+    
+    [self selectedScrollsToTop];
+}
+
+
+-(void)selectedScrollsToTop
+{
+    switch (selectedView) {
+        case 0:
+            _myTableView1.scrollsToTop = YES;
+            _myTableView.scrollsToTop = NO;
+            _myTableView2.scrollsToTop = NO;
+            break;
+        case 1:
+            _myTableView1.scrollsToTop = NO;
+            _myTableView.scrollsToTop = YES;
+            _myTableView2.scrollsToTop = NO;
+            break;
+        case 2:
+            _myTableView1.scrollsToTop = NO;
+            _myTableView.scrollsToTop = NO;
+            _myTableView2.scrollsToTop = YES;
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
@@ -391,14 +418,23 @@
     
     switch (selectedView) {
         case 0:
+            _myTableView1.scrollsToTop = YES;
+            _myTableView.scrollsToTop = NO;
+            _myTableView2.scrollsToTop = NO;
             _myTableView1.contentOffset=CGPointMake(0, -80);
             [_refreshHeaderView1 szksetstate];
             break;
         case 1:
+            _myTableView1.scrollsToTop = NO;
+            _myTableView.scrollsToTop = YES;
+            _myTableView2.scrollsToTop = NO;
             _myTableView.contentOffset=CGPointMake(0, -80);
             [_refreshHeaderView2 szksetstate];
             break;
         case 2:
+            _myTableView1.scrollsToTop = NO;
+            _myTableView.scrollsToTop = NO;
+            _myTableView2.scrollsToTop = YES;
             _myTableView2.contentOffset=CGPointMake(0, -80);
             [_refreshHeaderView3 szksetstate];
             break;
@@ -514,9 +550,9 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
     BOOL authkey=[[NSUserDefaults standardUserDefaults] boolForKey:USER_IN];
-    
+
     selectedView = authkey?0:1;
-    
+
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = MY_MACRO_NAME?-5:5;
@@ -813,11 +849,7 @@
     
     xiala_tab.scrollsToTop = NO;
     
-    _myTableView.scrollsToTop = NO;
-    
-    _myTableView1.scrollsToTop = YES;
-    
-    _myTableView2.scrollsToTop = NO;
+    [self selectedScrollsToTop];
     
 }
 
@@ -1529,10 +1561,6 @@
 
 #pragma mark-UIScrollViewDelegate
 
--(BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
-{
-    return NO;
-}
 
 //滚动视图开始时
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -1606,6 +1634,9 @@
                 
                 [self refreshState];
             }
+            
+            
+            [self selectedScrollsToTop];
         }
     }
 }
